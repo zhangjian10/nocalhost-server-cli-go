@@ -1,5 +1,14 @@
 package api
 
-func Login() {
-	getV1Request().SetBody(`{"email":"","password":""}`).Post("/v1/login")
+import "fmt"
+
+func Login(email string, password string) {
+	resp, err := getV1Request().
+		SetBody(map[string]interface{}{"email": email, "password": password}).
+		Post("/login")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(resp)
 }
