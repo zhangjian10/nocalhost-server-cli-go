@@ -1,14 +1,17 @@
 package api
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/go-resty/resty/v2"
+)
 
 func Login(email string, password string) {
-	resp, err := getV1Request().
-		SetBody(map[string]interface{}{"email": email, "password": password}).
-		Post("/login")
-
-	if err != nil {
-		fmt.Println(err)
+	request := &Request{
+		request(V1).SetBody(map[string]interface{}{"email": email, "password": password}),
 	}
-	fmt.Println(resp)
+
+	resp, err := request.Execute(resty.MethodPost, "/login")
+
+	fmt.Println(resp.Data, err)
 }
