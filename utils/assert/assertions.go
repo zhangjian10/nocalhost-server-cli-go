@@ -25,6 +25,14 @@ func NotEmpty(object interface{}, msgAndArgs ...interface{}) {
 
 }
 
+func Empty(object interface{}, msgAndArgs ...interface{}) {
+	pass := isEmpty(object)
+	if !pass {
+		panic(fmt.Sprintf("Should be empty, but was %v %v", object, msgAndArgs))
+	}
+
+}
+
 // isEmpty gets whether the specified object is considered empty or not.
 func isEmpty(object interface{}) bool {
 

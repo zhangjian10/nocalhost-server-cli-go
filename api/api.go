@@ -77,7 +77,10 @@ func (r *Request) Execute(method, url string, output interface{}) *BaseResult {
 	}
 
 	if output != nil {
-		mapstructure.Decode(result.Data, output)
+		config := &mapstructure.DecoderConfig{TagName: "json", Result: &output}
+		decoder, _ := mapstructure.NewDecoder(config)
+
+		decoder.Decode(result.Data)
 	}
 
 	return result

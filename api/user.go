@@ -7,8 +7,7 @@ import (
 )
 
 type loginResult struct {
-	Token        string `json:"token"`
-	RefreshToken string `json:"refresh_token"`
+	Token string `json:"token"`
 }
 
 func Login(email string, password string) {

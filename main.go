@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"nocalhost/server/api"
+	"nocalhost/server/utils"
 	"nocalhost/server/utils/assert"
 	"os"
 )
@@ -11,12 +12,12 @@ func main() {
 	email := os.Getenv("NH_SERVER_EMAIL")
 	password := os.Getenv("NH_SERVER_PASSWORD")
 
-	assert.NotEmpty(email)
-	assert.NotEmpty(password)
+	assert.NotEmpty(email, "email")
+	assert.NotEmpty(password, "password")
 
 	api.Login(email, password)
 
-	id := api.CreateVcluster(1)
+	vcluster := api.CreateVcluster(1)
 
-	fmt.Sprintf("id: %v", id)
+	log.Println(utils.ToJson(vcluster))
 }
