@@ -1,23 +1,37 @@
 package main
 
 import (
-	"log"
-	"nocalhost/server/api"
-	"nocalhost/server/utils"
-	"nocalhost/server/utils/assert"
+	"fmt"
+	"nocalhost/server/cmd"
 	"os"
 )
 
 func main() {
-	email := os.Getenv("NH_SERVER_EMAIL")
-	password := os.Getenv("NH_SERVER_PASSWORD")
+	// email := os.Getenv("NH_SERVER_EMAIL")
+	// password := os.Getenv("NH_SERVER_PASSWORD")
 
-	assert.NotEmpty(email, "email")
-	assert.NotEmpty(password, "password")
+	// assert.NotEmpty(email, "email")
+	// assert.NotEmpty(password, "password")
 
-	api.Login(email, password)
+	// api.Login(email, password)
 
-	vcluster := api.CreateVcluster(1)
+	// devSpace := api.CreateVcluster(1)
 
-	log.Println(utils.ToJson(vcluster))
+	// api.DeleteDevSpace(devSpace.ID)
+
+	if err := run(os.Args); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func run(args []string) error {
+	rootCmd := cmd.NewCmdRoot("", "")
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return nil
 }

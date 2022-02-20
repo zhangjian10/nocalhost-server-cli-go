@@ -2,13 +2,12 @@ package api
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/mitchellh/mapstructure"
 )
 
-type BaseResult struct {
+type baseResult struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
@@ -28,30 +27,30 @@ func request(version string) *Request {
 	r := &Request{
 		resty.
 			New().
-			SetBaseURL(os.Getenv("NH_SERVER_HOST") + version).
+			SetBaseURL(hostname + version).
 			R(),
 	}
 
 	return r
 }
 
-var token string
+var token, hostname string
 
-func SetToken(t string) {
+func SetParameters(h, t string) {
+	hostname = h
 	token = t
 }
-
-func (r BaseResult) isSuccess() bool {
+func (r *baseResult) isSuccess() bool {
 	return r.Code == 0
 }
 
-func (r BaseResult) error() string {
-	return fmt.Sprintf("[ServiceError]\n code:%v\n message:%v", r.Code, r.Message)
+func (r *baseResult) error() error {
+	return fmt.Errorf("service error, code:%d, message:%s", r.Code, r.Message)
 }
 
-func (r *Request) Execute(method, url string, output interface{}) *BaseResult {
+func (r *Request) Execute(method, url string, output interface{}) (*baseResult, error) {
 
-	var result *BaseResult
+	var result *baseResult
 	var err error
 
 	request := r.
@@ -65,15 +64,15 @@ func (r *Request) Execute(method, url string, output interface{}) *BaseResult {
 	res, err := request.Execute(method, url)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	if !res.IsSuccess() {
-		panic(fmt.Errorf("%d %s", res.StatusCode(), res.Status()))
+		return nil, fmt.Errorf("request fail, code:%v, status:%v, body:%v", res.StatusCode(), res.Status(), string(res.Body()))
 	}
 
 	if !result.isSuccess() {
-		panic(result.error())
+		return nil, result.error()
 	}
 
 	if output != nil {
@@ -83,5 +82,5 @@ func (r *Request) Execute(method, url string, output interface{}) *BaseResult {
 		decoder.Decode(result.Data)
 	}
 
-	return result
+	return result, nil
 }
