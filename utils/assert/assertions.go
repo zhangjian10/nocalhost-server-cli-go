@@ -2,6 +2,7 @@ package assert
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"time"
 )
@@ -10,7 +11,7 @@ func Equal(obj1, obj2 interface{}, kind reflect.Kind, message string) {
 	_, result := compare(obj1, obj2, kind)
 
 	if !result {
-		panic(message)
+		fmt.Fprint(os.Stderr, message)
 	}
 }
 
@@ -20,7 +21,7 @@ func Equal(obj1, obj2 interface{}, kind reflect.Kind, message string) {
 func NotEmpty(object interface{}, msgAndArgs ...interface{}) {
 	pass := !isEmpty(object)
 	if !pass {
-		panic(fmt.Sprintf("Should NOT be empty, but was %v %v", object, msgAndArgs))
+		fmt.Fprintf(os.Stderr, "should NOT be empty, but was %v %v", object, msgAndArgs)
 	}
 
 }
@@ -28,7 +29,7 @@ func NotEmpty(object interface{}, msgAndArgs ...interface{}) {
 func Empty(object interface{}, msgAndArgs ...interface{}) {
 	pass := isEmpty(object)
 	if !pass {
-		panic(fmt.Sprintf("Should be empty, but was %v %v", object, msgAndArgs))
+		fmt.Fprintf(os.Stderr, "Should be empty, but was %v %v", object, msgAndArgs)
 	}
 
 }

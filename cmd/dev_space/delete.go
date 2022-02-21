@@ -12,11 +12,12 @@ var id int64
 func newDeleteCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete",
-		Short: "delete devspace",
+		Short: "Delete Devspace",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return api.DeleteDevSpace(id)
 		},
 	}
+	
 	cmd.Flags().Int64Var(&id, "id", 0, "ClusterId")
 
 	cmd.MarkFlagRequired("id")

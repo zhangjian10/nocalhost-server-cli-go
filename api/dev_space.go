@@ -39,15 +39,16 @@ func (r *DevSpace) waitReady() (*DevSpace, error) {
 		for {
 			time.Sleep(time.Second * 5)
 
-			r, err := GetDevSpace(r.ID)
+			rr, err := GetDevSpace(r.ID)
 
 			if err != nil {
 				return nil, err
 			}
 
-			v := r.VirtualCluster
+			v := rr.VirtualCluster
 
 			if v.Status == ReadyStatus || v.Status == ErrorStatus {
+				r = rr
 				break
 			}
 
