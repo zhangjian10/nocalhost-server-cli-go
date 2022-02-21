@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Build an osx binary from linux
+#
+
+set -eu -o pipefail
+
+export GOOS=darwin
+export GOARCH=amd64
+
+source ./scripts/.variables
+
+TARGET="build/nh-server$GOOS-$GOARCH"
+
+echo "Building $TARGET"
+go build -o "${TARGET}" --ldflags "${LDFLAGS}"
+
+echo "Compress $TARGET"
+upx "${TARGET}"
+
+shasum -a 256 "${TARGET}" | awk '{print $1}' > "${TARGET}"-SHA256

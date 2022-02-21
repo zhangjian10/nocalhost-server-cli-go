@@ -13,7 +13,7 @@ Now supports devspace vcluster create and delete
 ## login
 
 ```shell
-nh-server-cli login -u $email -p $password -h $hostname
+nh-server login -u $email -p $password -h $hostname
 ```
 
 ## vcluster
@@ -21,7 +21,7 @@ nh-server-cli login -u $email -p $password -h $hostname
 ### create
 
 ```shell
-nh-server-cli devspace create --id $cluster_id
+nh-server devspace create --id $cluster_id
 ```
 
 output:
@@ -34,5 +34,5 @@ KUBECONFIG=""
 ### delete
 
 ```shell
-nh-server-cli devspace delete --id $devspace_id
+nh-server devspace delete --id $devspace_id
 ```

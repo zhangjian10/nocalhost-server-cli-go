@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -eu
+
+VERSION=${VERSION:-$(git describe --long --tags --always)}
+GITCOMMIT=`git describe --match=NeVeRmAtCh --always --abbrev=40`
+BUILDTIME=`date +"%Y-%m-%dT%H:%M:%SZ"`
+BRANCH=${GITHUB_HEAD_REF:-$(git rev-parse --abbrev-ref HEAD)}
+OS_ARCH="${GOOS}/${GOARCH}"
+
+export LDFLAGS="\
+    -w -s \
+    -X \"nocalhost/server/cmd.GitCommit=${GITCOMMIT}\" \
+    -X \"nocalhost/server/cmd.BuildTime=${BUILDTIME}\" \
+    -X \"nocalhost/server/cmd.Version=${VERSION}\" \
+    -X \"nocalhost/server/cmd.Branch=${BRANCH}\" \
+	  -X \"nocalhost/server/cmd.OsArch=${OS_ARCH}\" \
+"

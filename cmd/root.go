@@ -19,7 +19,7 @@ func preRunE(cmd *cobra.Command) error {
 	}
 
 	if exists, _ := utils.PathExists(constants.TokenPath); !exists {
-		return errors.New("you need to log in and use, you can execute: nh-server-cli login")
+		return errors.New("you need to log in and use, you can execute: nh-server login")
 	}
 
 	data, _ := ioutil.ReadFile(constants.TokenPath)
@@ -40,7 +40,7 @@ func preRunE(cmd *cobra.Command) error {
 
 func NewCmdRoot(version, buildDate string) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "nh-server-cli",
+		Use:  "nh-server",
 		Long: "Nocalhost server cli",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			return preRunE(cmd)
@@ -51,6 +51,7 @@ func NewCmdRoot(version, buildDate string) *cobra.Command {
 
 	cmd.AddCommand(devspace.NewDevSpaceCmd())
 	cmd.AddCommand(newCmdLogin())
+	cmd.AddCommand(newCmdVersion())
 
 	return cmd
 }
